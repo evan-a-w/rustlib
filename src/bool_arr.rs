@@ -10,7 +10,7 @@ impl BoolArr {
             sz += 1;
         }
         BoolArr {
-            vec: vec![if init_val {0xffffffff} else {0}; sz],
+            vec: vec![if init_val {0xffffffffffffffff} else {0}; sz],
             size: init_size,
         }
     }
