@@ -76,3 +76,61 @@ pub fn segmented_sieve(L: usize, R: usize) -> Vec<usize> {
     }
     res
 }
+
+pub fn segmented_sieve_till(n: usize) -> Vec<usize> {
+    let mut del = (n as f64).sqrt().floor() as usize;
+    let mut l: usize = del + 1;
+    let mut h: usize = 2 * del; // go from del + 1 to 2*del
+    let mut primes = sieve(del);
+
+    let mut first_over: bool = true;
+    while h <= n {
+        let mut nbv = BoolArr::new(del, true);
+
+        let max = (h as f64).sqrt().floor() as usize;
+        for &i in &primes {
+            if i > max {
+                break;
+            }
+            let mut index_n = (((l as f64) / (i as f64)).ceil() as usize) * i - l;
+            while index_n < del {
+                nbv.set(index_n, false);
+                index_n += i;
+            }
+        }
+
+        for i in 0..del {
+            if nbv.get(i) {
+                primes.push(i + l);
+            }
+        }
+
+        l = h + 1;
+        h += del;
+
+        if h > n && first_over {
+            let dif = h - n;
+            del -= dif;
+            h = n;
+            first_over = false;
+        }
+    }
+
+    primes
+}
+
+pub fn prime_factors_big(mut n: usize) -> Vec<usize> {
+    let mut res: Vec<usize> = Vec::new();
+    let mut i = 2;
+
+    while n > 1 {
+        if is_prime(i) && n % i == 0 {
+            res.push(i);
+            n /= i;
+        }
+
+        i += 1;
+    }
+
+    res
+}

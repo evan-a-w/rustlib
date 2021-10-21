@@ -265,3 +265,43 @@ mod tests {
 
     }
 }
+
+// assumes elemeents of v are distinct
+pub fn combs<T: Copy + Eq>(v: &Vec<T>, n: usize) -> Vec<Vec<T>> {
+    let mut res: Vec<Vec<T>> = Vec::new();
+    if n == 1 {
+        for &i in v {
+            res.push(vec![i]);
+        }
+    } else if v.len() == n {
+        res.push(v.clone());
+    } else if v.len() > n {
+        for i in 0..v.len() {
+            let mut tv: Vec<T> = Vec::new();
+            for j in (i + 1)..v.len() {
+                tv.push(v[j]);
+            }
+            let nr: Vec<Vec<T>> = combs(&tv, n - 1);
+            for mut x in nr {
+                x.push(v[i]);
+                res.push(x);
+            }
+        }
+    }
+
+    res
+}
+
+pub fn factors(n: usize) -> Vec<usize> {
+    let mut res: Vec<usize> = vec![1];
+
+    for i in 2..((n as f64).sqrt() as usize) {
+        if n % i == 0 {
+            res.push(i);
+            res.push(n / i);
+        }
+    }
+
+    res.push(n);
+    res
+}
