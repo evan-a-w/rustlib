@@ -1,7 +1,7 @@
-mod big_bcd;
-mod bool_arr;
-mod primes;
-mod ratio;
+pub mod big_bcd;
+pub mod bool_arr;
+pub mod primes;
+pub mod ratio;
 
 use bool_arr::BoolArr;
 use std::cmp::max;
