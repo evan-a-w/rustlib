@@ -237,4 +237,31 @@ mod tests {
         assert!(a / b == Ratio::new(1037, 1017));
         assert!(b / a == Ratio::new(1017, 1037));
     }
+
+    #[test]
+    fn sieve_2000000_test() {
+        let a = sieve(2000000);
+        let b = segmented_sieve(0, 2000000);
+        for (x, y) in a.iter().zip(b.iter()) {
+            println!("{} vs {}", x, y);
+            assert!(x == y);
+        }
+    }
+
+    #[test]
+    fn project_euler_10_test() {
+	let mut res: BigBcd = BigBcd::from(0);
+	let primes = sieve(2000000);
+	for i in primes {
+	    res = res.add(&BigBcd::from(i));
+	}
+	let mut res2 = BigBcd::from(0);
+	let primes = segmented_sieve(0, 2000000);
+	for i in primes {
+	    res2 = res2.add(&BigBcd::from(i));
+	}
+	assert!(res == BigBcd::from("142913828922"));
+	assert!(res2 == BigBcd::from("142913828922"));
+
+    }
 }
