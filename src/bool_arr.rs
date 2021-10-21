@@ -10,7 +10,7 @@ impl BoolArr {
             sz += 1;
         }
         BoolArr {
-            vec: vec![if init_val {0xffffffffffffffff} else {0}; sz],
+            vec: vec![if init_val { 0xffffffffffffffff } else { 0 }; sz],
             size: init_size,
         }
     }
@@ -25,7 +25,7 @@ impl BoolArr {
             self.vec[i / 64] |= 1 << (i % 64);
         }
     }
-    
+
     pub fn push(&mut self, v: bool) {
         if self.size % 64 == 0 {
             self.vec.push(0);

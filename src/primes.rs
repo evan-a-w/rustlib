@@ -44,10 +44,10 @@ pub fn segmented_sieve_bool(L: usize, R: usize) -> BoolArr {
                 f += i;
             }
             while f <= R {
-	        ba.set(f - L, false); 
+                ba.set(f - L, false);
                 f += i;
             }
-        }        
+        }
     }
     ba
 }
