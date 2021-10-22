@@ -264,6 +264,12 @@ mod tests {
 	assert!(res2 == BigBcd::from("142913828922"));
 
     }
+
+    #[test]
+    fn is_prime_false() {
+        assert!(!is_prime(241161));
+        assert!(!is_prime(612411));
+    }
 }
 
 // assumes elemeents of v are distinct
