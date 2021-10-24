@@ -2,6 +2,7 @@ pub mod big_bcd;
 pub mod bool_arr;
 pub mod primes;
 pub mod ratio;
+pub mod rope;
 
 use bool_arr::BoolArr;
 use std::cmp::max;
