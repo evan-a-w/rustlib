@@ -13,6 +13,7 @@ mod tests {
     use crate::primes::*;
     use crate::big_bcd::BigBcd;
     use crate::ratio::Ratio;
+    use crate::rope::Rope;
 
     #[test]
     fn bool_arr_test() {
@@ -59,7 +60,7 @@ mod tests {
             }
         }
         assert!(count == 2);
-        let mut br = BoolArr::new(101, true);
+        let br = BoolArr::new(101, true);
         assert!(br.get(37));
         assert!(br.get(97));
     }
@@ -270,6 +271,29 @@ mod tests {
     fn is_prime_false() {
         assert!(!is_prime(241161));
         assert!(!is_prime(612411));
+    }
+
+    #[test]
+    fn test_rope() {
+        let r = Rope::new(String::from("peeeee"));
+        let r = r.concat(Rope::new(String::from(" my name")));
+        assert!(format!("{}", r) == String::from("peeeee my name"));
+        let (t, d) = r.split(3);
+        let d = d.unwrap();
+        assert!(format!("{}", t) == String::from("pee"));
+        assert!(format!("{}", d) == String::from("eee my name"));
+        let r = Rope::new(String::from("peeeee"));
+        assert!(r.split(30).1.is_none());
+        let r = Rope::new(String::from("peeeee"));
+        assert!(r.split(6).1.is_none());
+        let r = Rope::new(String::from("peeeee"));
+        assert!(!r.split(5).1.is_none());
+        let r = Rope::new(String::from("peeeee"));
+        let mut r = r.concat(Rope::new(String::from(" my name")));
+        r = r.insert(3, String::from("DOOBA"));
+        assert!(format!("{}", r) == String::from("peeDOOBAeee my name"));
+        r = r.delete(3, 7);
+        assert!(format!("{}", r) == String::from("peeeee my name"));
     }
 }
 
