@@ -290,7 +290,7 @@ mod tests {
         assert!(!r.split(5).1.is_none());
         let r = Rope::new(String::from("peeeee"));
         let mut r = r.concat(Rope::new(String::from(" my name")));
-        r = r.insert(3, String::from("DOOBA"));
+        r = r.insert(3, Rope::new(String::from("DOOBA")));
         assert!(format!("{}", r) == String::from("peeDOOBAeee my name"));
         r = r.delete(3, 7);
         assert!(format!("{}", r) == String::from("peeeee my name"));

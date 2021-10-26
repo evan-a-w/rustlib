@@ -1,5 +1,71 @@
 use std::rc::Rc;
 use std::fmt;
+use std::mem::{replace, MaybeUninit};
+
+pub struct FString {
+    rope: Rope
+}
+
+impl FString {
+    pub fn new(s: String) -> Self {
+        Self {
+            rope: Rope::new(s),
+        }
+    }
+
+    pub fn concat(&mut self, other: Self) {
+        // We are switching self.rope with an uninitialised value and immediately
+        // replacing it, therefore it is safe.
+        unsafe {
+            let nr = replace(&mut self.rope, MaybeUninit::zeroed().assume_init());
+            self.rope = nr.concat(other.rope);
+        }
+    }
+
+    pub fn nth(&self, i: usize) -> Option<char> {
+        self.rope.nth(i)
+    }
+
+    pub fn size(&self) -> usize {
+        self.rope.size()
+    }
+
+    pub fn split(&mut self, i: usize) -> Option<Self> {
+        // We are switching self.rope with an uninitialised value and immediately
+        // replacing it, therefore it is safe.
+        unsafe {
+            let nr = replace(&mut self.rope, MaybeUninit::zeroed().assume_init());
+            let (r, o) = nr.split(i);
+            self.rope = r;
+            match o {
+                None => None,
+                Some(x) => Some(Self {rope: x}),
+            }
+        }
+    }
+
+    pub fn insert(&mut self, i: usize, s: Self) {
+        unsafe {
+            let nr = replace(&mut self.rope, MaybeUninit::zeroed().assume_init());
+            let nr = nr.insert(i, s.rope);
+            self.rope = nr;
+        }
+    }
+
+    pub fn delete(&mut self, i: usize, j: usize) {
+        unsafe {
+            let nr = replace(&mut self.rope, MaybeUninit::zeroed().assume_init());
+            let nr = nr.delete(i, j);
+            self.rope = nr;
+        }
+    }
+}
+
+impl fmt::Display for FString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.rope)
+    }
+}
 
 pub enum Rope {
     Node(RopeNode),
@@ -143,9 +209,9 @@ impl Rope {
         }
     }
 
-    pub fn insert(self, i: usize, s: String) -> Self {
+    pub fn insert(self, i: usize, s: Self) -> Self {
         let (mut res, r) = self.split(i);
-        res = res.concat(Rope::new(s));
+        res = res.concat(s);
         match r {
             None => {},
             Some(x) => {
