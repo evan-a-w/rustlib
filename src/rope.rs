@@ -52,10 +52,10 @@ impl FString {
         }
     }
 
-    pub fn insert_string(&mut self, i: usize, s: String) {
+    pub fn insert_rc_string(&mut self, i: usize, s: Rc<String>) {
         unsafe {
             let nr = replace(&mut self.rope, MaybeUninit::zeroed().assume_init());
-            let nr = nr.insert(i, Rope::new(s));
+            let nr = nr.insert(i, Rope::Leaf(s));
             self.rope = nr;
         }
     }
