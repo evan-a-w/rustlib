@@ -52,6 +52,14 @@ impl FString {
         }
     }
 
+    pub fn insert_string(&mut self, i: usize, s: String) {
+        unsafe {
+            let nr = replace(&mut self.rope, MaybeUninit::zeroed().assume_init());
+            let nr = nr.insert(i, Rope::new(s));
+            self.rope = nr;
+        }
+    }
+
     pub fn delete(&mut self, i: usize, j: usize) {
         unsafe {
             let nr = replace(&mut self.rope, MaybeUninit::zeroed().assume_init());
